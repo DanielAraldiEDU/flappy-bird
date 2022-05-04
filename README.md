@@ -15,6 +15,8 @@
 
 > O objetivo no jogo é ganhar o maior número possível de pontos, controlando um pássaro (tocando na tela) sem deixá-lo colidir nos canos. Se o pássaro tocar em algum obstáculo ou se deixar o pássaro cair, o jogo termina. Sempre que o personagem passa por um conjunto de canos, o jogador ganha um ponto.
 
+<hr></hr>
+
 ### Desenvolvimento
 
 - Problemas a serem solucionados:
@@ -29,5 +31,7 @@
 1. ⛔️ Os obstáculos deverão ser escolhidos aleatoriamente com passagens: no meio, em cima e embaixo; (explicação sobre números aleatórios no final do documento).
 2. ⛔️ O jogo deverá apresentar 2 obstáculos simultâneos com uma certa distância entre eles.
 3. ⛔️ A velocidade do jogo deverá aumentar a cada 5 obstáculos superados.
+
+<hr></hr>
 
 **Obs.:** Para o desenvolvimento do código não poderão ser utilizadas variáveis compostas (arrays, structs) e funções.
