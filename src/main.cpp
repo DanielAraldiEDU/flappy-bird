@@ -42,26 +42,25 @@ int main()
   // FIM: COMANDOS PARA REPOSICIONAR O CURSOR NO INÍCIO DA TELA
   /// ALERTA: NÃO MODIFICAR O TRECHO DE CÓDIGO, ACIMA.
 
-  // LIMPA O TERMINAL AO COMEÇAR O JOGO
-  system("cls");
+  system("cls"); // LIMPA O TERMINAL AO COMEÇAR O JOGO
 
   srand(time(NULL));
 
   // DECLAÇÃO DE VARIÁVEIS
-  int bird_x = 100, bird_y = 10;
+  int bird_x = 15, bird_y = 10;
   int placar_x = 1, placar_y = 1;
-  int obstaculo_x = 129, obstaculo_y;
+  int obstaculo_x = 130, obstaculo_y;
   int tecla, numeroAleatorio, placar = 0;
+  bool estaVoando = true;
 
   /// DESENHO DO CENÁRIO
-  cout << "----------------------------------------------------------------------------------------------------------------------------------";
+  cout << "-----------------------------------------------------------------------------------------------------------------------------------";
   cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-  cout << "----------------------------------------------------------------------------------------------------------------------------------";
+  cout << "-----------------------------------------------------------------------------------------------------------------------------------";
 
-  // GERA NÚMEROS ALEATÓRIOS 3 e 17
-  numeroAleatorio = rand() % 15 + 3;
+  numeroAleatorio = rand() % 15 + 3; // GERA NÚMEROS ALEATÓRIOS 3 e 17
 
-  while (true)
+  while (estaVoando)
   { // esse laço faz o jogo rodar para sempre
 
     // POSICIONA O PLACAR
@@ -76,6 +75,13 @@ int main()
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     cout << char(190);
 
+    if (bird_y <= 0 || bird_y >= 20) // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O TETO OU O CHÃO
+    {
+      estaVoando = false; // NÃO ESTÁ MAIS VOANDO POR QUE COLIDIU COM O TETO OU O CHÃO
+      system("pause");    // PAUSA O JOGO
+      return 0;           // PARA FINALIZAR O JOGO APÓS PRESSIONAR ALGUMA TECLA, SE NÃO EXISTR O JOGO EXECUTA MAIS UMA ÚNICA VEZ
+    }
+
     /// POSICIONA O OBSTÁCULO
     obstaculo_y = 1;
     while (obstaculo_y < 20)
@@ -84,8 +90,7 @@ int main()
       coord.Y = obstaculo_y;
       SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 
-      // CRIA ESPAÇAMENTO DE DOIS ESPAÇOS PARA CIMA E PARA BAIXO NO OBSTÁCULO
-      if (obstaculo_y < numeroAleatorio - 2 || obstaculo_y > numeroAleatorio + 2)
+      if (obstaculo_y < numeroAleatorio - 2 || obstaculo_y > numeroAleatorio + 2) // CRIA ESPAÇAMENTO DE DOIS ESPAÇOS PARA CIMA E PARA BAIXO NO OBSTÁCULO
       {
         cout << char(219);
       }
@@ -96,33 +101,29 @@ int main()
 
       obstaculo_y++;
 
-      coord.X = obstaculo_x + 4;
+      coord.X = obstaculo_x + 4; // ADICIONA COMPRIMENTO AO OBSTÁCULO
       SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
       cout << " ";
     }
 
-    /// VERIFICA COLISÃO
-
-    /// VERIFICA COMANDO DO JOGADOR
-    if (kbhit())
+    // VERIFICA COLISÃO
+    if (kbhit())       // VERIFICA COMANDO DO JOGADOR
     {                  /// verifica se uma tecla foi pressionada
       tecla = getch(); // verifica comando do jogador
     }
 
-    // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O OBSTÁCULO
-    if (obstaculo_x == bird_x && (bird_y < numeroAleatorio - 2 || bird_y > numeroAleatorio + 2))
+    if (obstaculo_x == bird_x && (bird_y < numeroAleatorio - 2 || bird_y > numeroAleatorio + 2)) // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O OBSTÁCULO
     {
-      system("pause");
+      estaVoando = false; // NÃO ESTÁ MAIS VOANDO POR QUE COLIDIU COM O OBSTÁCULO
+      system("pause");    // PAUSA O JOGO
     }
 
-    // ADICIONA PONTUAÇÃO AO PLACAR AO PASSAR DO OBSTÁCULO
-    if (bird_x == obstaculo_x + 4)
+    if (bird_x == obstaculo_x + 4) // ADICIONA PONTUAÇÃO AO PLACAR AO PASSAR DO OBSTÁCULO
     {
       placar++;
     }
 
-    // PÁSSARO CAI 1 POSIÇÃO SE NÃO FOR PRESSIONADO PARA SUBIR
-    if (tecla == 'w')
+    if (tecla == 'w') // PÁSSARO CAI 1 POSIÇÃO SE NÃO FOR PRESSIONADO PARA SUBIR
     {
       bird_y--;
       tecla = '0';
@@ -132,17 +133,9 @@ int main()
       bird_y++;
     }
 
-    // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O TETO OU O CHÃO
-    if (bird_y <= -1 || bird_y >= 21)
-    {
-      system("pause");
-    }
+    obstaculo_x--; // OBSTÁCULO AVANÇA UMA POSIÇÃO PARA ESQUERDA
 
-    /// OBSTÁCULO AVANÇA UMA POSIÇÃO PARA ESQUERDA
-    obstaculo_x--;
-
-    /// TEMPO DE ESPERA
-    Sleep(150);
+    Sleep(150); // TEMPO DE ESPERA
 
     // REMOVE O RASTRO DO PÁSSARO PARA CIMA
     coord.Y = bird_y - 1;
