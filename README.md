@@ -24,7 +24,7 @@
 1. ✅ O pássaro “deixa rastros”: Quando o pássaro é desenhado na sua nova posição, o jogo não apaga o desenho do pássaro da posição anterior.
 2. ✅ O obstáculo “deixa rastros”: O obstáculo é desenhado em sua nova posição, mas o jogo não apaga o desenho da posição anterior do obstáculo.
 3. ✅ Não é apresentado o placar em lugar nenhum da tela, mas o jogo deveria apresentar uma pontuação que aumenta a cada obstáculo superado.
-4. ⛔️ Não existe tratamento de colisão, o pássaro não colide com o teto, chão ou com os obstáculos.
+4. ✅ Não existe tratamento de colisão, o pássaro não colide com o teto, chão ou com os obstáculos.
 
 - Novas funcionalidades a serem implementadas:
 
