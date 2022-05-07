@@ -50,10 +50,11 @@ int main()
   int bird_x = 15, bird_y = 10;
   int placar_x = 1, placar_y = 1;
   int obstaculo_x = 130, obstaculo_y;
+  int game_over_x = 65, game_over_y = 10;
   int tecla, numeroAleatorio, placar = 0;
   bool estaVoando = true;
 
-  /// DESENHO DO CENÁRIO
+  // DESENHO DO CENÁRIO
   cout << "-----------------------------------------------------------------------------------------------------------------------------------";
   cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
   cout << "-----------------------------------------------------------------------------------------------------------------------------------";
@@ -69,20 +70,13 @@ int main()
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     cout << "PLACAR: " << placar;
 
-    /// POSICIONA O PÁSSARO
+    // POSICIONA O PÁSSARO
     coord.X = bird_x;
     coord.Y = bird_y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     cout << char(190);
 
-    if (bird_y <= 0 || bird_y >= 20) // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O TETO OU O CHÃO
-    {
-      estaVoando = false; // NÃO ESTÁ MAIS VOANDO POR QUE COLIDIU COM O TETO OU O CHÃO
-      system("pause");    // PAUSA O JOGO
-      return 0;           // PARA FINALIZAR O JOGO APÓS PRESSIONAR ALGUMA TECLA, SE NÃO EXISTR O JOGO EXECUTA MAIS UMA ÚNICA VEZ
-    }
-
-    /// POSICIONA O OBSTÁCULO
+    // POSICIONA O OBSTÁCULO
     obstaculo_y = 1;
     while (obstaculo_y < 20)
     {
@@ -101,21 +95,27 @@ int main()
 
       obstaculo_y++;
 
-      coord.X = obstaculo_x + 4; // ADICIONA COMPRIMENTO AO OBSTÁCULO
+      coord.X = obstaculo_x + 1; // ADICIONA COMPRIMENTO AO OBSTÁCULO
       SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
       cout << " ";
     }
 
-    // VERIFICA COLISÃO
-    if (kbhit())       // VERIFICA COMANDO DO JOGADOR
-    {                  /// verifica se uma tecla foi pressionada
-      tecla = getch(); // verifica comando do jogador
+    if (bird_y <= 0 || bird_y >= 20) // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O TETO OU O CHÃO
+    {
+      // POSICIONA A MENSAGEM DE GAME OVER
+      coord.X = game_over_x;
+      coord.Y = game_over_y;
+      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+      cout << "GAME OVER";
+
+      estaVoando = false; // NÃO ESTÁ MAIS VOANDO POR QUE COLIDIU COM O TETO OU O CHÃO
+      system("pause");    // PAUSA O JOGO
     }
 
-    if (obstaculo_x == bird_x && (bird_y < numeroAleatorio - 2 || bird_y > numeroAleatorio + 2)) // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O OBSTÁCULO
-    {
-      estaVoando = false; // NÃO ESTÁ MAIS VOANDO POR QUE COLIDIU COM O OBSTÁCULO
-      system("pause");    // PAUSA O JOGO
+    // VERIFICA COLISÃO
+    if (kbhit())       // VERIFICA COMANDO DO JOGADOR
+    {                  // verifica se uma tecla foi pressionada
+      tecla = getch(); // verifica comando do jogador
     }
 
     if (bird_x == obstaculo_x + 4) // ADICIONA PONTUAÇÃO AO PLACAR AO PASSAR DO OBSTÁCULO
@@ -153,6 +153,18 @@ int main()
     if (!(bird_y == 19))
     {
       cout << " ";
+    }
+
+    if (obstaculo_x == bird_x && (bird_y < numeroAleatorio - 2 || bird_y > numeroAleatorio + 2)) // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O OBSTÁCULO
+    {
+      // POSICIONA A MENSAGEM DE GAME OVER
+      coord.X = game_over_x;
+      coord.Y = game_over_y;
+      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+      cout << "GAME OVER";
+
+      estaVoando = false; // NÃO ESTÁ MAIS VOANDO POR QUE COLIDIU COM O OBSTÁCULO
+      system("pause");    // PAUSA O JOGO
     }
   }
 
