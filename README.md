@@ -30,7 +30,7 @@
 
 1. ✅ Os obstáculos deverão ser escolhidos aleatoriamente com passagens: no meio, em cima e embaixo; (explicação sobre números aleatórios no final do documento).
 2. ⛔️ O jogo deverá apresentar 2 obstáculos simultâneos com uma certa distância entre eles.
-3. ⛔️ A velocidade do jogo deverá aumentar a cada 5 obstáculos superados.
+3. ✅ A velocidade do jogo deverá aumentar a cada 5 obstáculos superados.
 
 <hr></hr>
 
