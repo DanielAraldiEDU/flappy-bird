@@ -48,10 +48,10 @@ int main()
 
   // DECLAÇÃO DE VARIÁVEIS
   int bird_x = 15, bird_y = 10;
-  int placar_x = 1, placar_y = 1;
+  int placar_x = 60, placar_y = 1;
   int obstaculo_x = 130, obstaculo_y;
-  int game_over_x = 65, game_over_y = 10;
-  int tecla, numeroAleatorio, placar = 0;
+  int game_over_x = 60, game_over_y = 10;
+  int tecla, numeroAleatorio, velocidade = 150, placar = 0;
   bool estaVoando = true;
 
   // DESENHO DO CENÁRIO
@@ -118,9 +118,13 @@ int main()
       tecla = getch(); // verifica comando do jogador
     }
 
-    if (bird_x == obstaculo_x + 4) // ADICIONA PONTUAÇÃO AO PLACAR AO PASSAR DO OBSTÁCULO
+    if (bird_x == obstaculo_x + 1) // ADICIONA PONTUAÇÃO AO PLACAR AO PASSAR DO OBSTÁCULO
     {
-      placar++;
+      placar++;                           // ADICIONA MAIS UM NA PONTUAÇÃO
+      if (placar != 0 && placar % 5 == 0) // SE O VALOR DA PONTUAÇÃO É DIFERENTE DE ZERO E MULTIPLO DE CINCO
+      {
+        velocidade -= 10; // A VELOCIDADE É AUMENTADA
+      }
     }
 
     if (tecla == 'w') // PÁSSARO CAI 1 POSIÇÃO SE NÃO FOR PRESSIONADO PARA SUBIR
@@ -135,7 +139,7 @@ int main()
 
     obstaculo_x--; // OBSTÁCULO AVANÇA UMA POSIÇÃO PARA ESQUERDA
 
-    Sleep(150); // TEMPO DE ESPERA
+    Sleep(velocidade); // TEMPO DE ESPERA
 
     // REMOVE O RASTRO DO PÁSSARO PARA CIMA
     coord.Y = bird_y - 1;
@@ -165,6 +169,22 @@ int main()
 
       estaVoando = false; // NÃO ESTÁ MAIS VOANDO POR QUE COLIDIU COM O OBSTÁCULO
       system("pause");    // PAUSA O JOGO
+    }
+
+    if (obstaculo_x < 0) // SE A POSIÇÃO DO OBSTÁCULO É MENOR QUE ZERO NO CENÁRIO
+    {
+      coord.X = obstaculo_x + 1; // ADICIONA MAIS UM PARA EXCLUIR O RASTRO DA POSIÇÃO ZERO DO CENÁRIO A CORDENADA
+      while (obstaculo_y > 0)    // ENQUANTO O Y DO OBSTÁCULO FOR MAIOR QUE ZERO
+      {
+        // REMOVE O RASTRO DA ÚLTIMA POSIÇÃO DO OBSTÁCULO NO CENÁRIO
+        coord.Y = obstaculo_y; // ADICIONA O VALOR ATUAL DO Y DO OBSTÁCULO A CORDENADA
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+        obstaculo_y--; // PEGA A POSIÇÃO ATUAL DO Y DO OBSTÁCULO E SUBTRAI POR UM
+        cout << " ";
+      }
+
+      numeroAleatorio = rand() % 15 + 3; // GERA NÚMEROS ALEATÓRIOS 3 e 17
+      obstaculo_x = 130;                 // VOLTA O OBSTÁCULO PARA A POSIÇÃO INICIAL
     }
   }
 
