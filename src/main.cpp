@@ -1,5 +1,5 @@
 /**
- * Autores:
+ *  Autores:
  *
  *  Bruno Ferreira Jimenez
  *  Daniel Sansão Araldi
@@ -10,9 +10,9 @@
 /* Versão beta desenvolvida por Thiago Felski Pereira para disciplina de Algoritmos */
 #include <iostream>
 #include <windows.h>
-#include <conio.h> ///para o getch()
+#include <conio.h> // para o getch()
 #include <time.h>
-/// https://stackoverflow.com/questions/34474627/linux-equivalent-for-conio-h-getch
+// https://stackoverflow.com/questions/34474627/linux-equivalent-for-conio-h-getch
 
 using namespace std;
 
@@ -51,7 +51,7 @@ int main()
   int placar_x = 60, placar_y = 1;
   int obstaculo_x = 130, obstaculo_y;
   int game_over_x = 60, game_over_y = 10;
-  int tecla, numeroAleatorio, velocidade = 150, placar = 0;
+  int tecla, numeroAleatorio, velocidade = 200, placar = 0;
   bool estaVoando = true;
 
   // DESENHO DO CENÁRIO
@@ -61,9 +61,8 @@ int main()
 
   numeroAleatorio = rand() % 15 + 3; // GERA NÚMEROS ALEATÓRIOS 3 e 17
 
-  while (estaVoando)
-  { // esse laço faz o jogo rodar para sempre
-
+  while (estaVoando) // ESSE LAÇO FAZ O JOGO RODAR SEMPRE
+  {
     // POSICIONA O PLACAR
     coord.X = placar_x;
     coord.Y = placar_y;
@@ -102,6 +101,7 @@ int main()
 
     if (bird_y <= 0 || bird_y >= 20) // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O TETO OU O CHÃO
     {
+      system("cls"); // LIMPA O TERMINAL DO JOGO
       // POSICIONA A MENSAGEM DE GAME OVER
       coord.X = game_over_x;
       coord.Y = game_over_y;
@@ -114,16 +114,16 @@ int main()
 
     // VERIFICA COLISÃO
     if (kbhit())       // VERIFICA COMANDO DO JOGADOR
-    {                  // verifica se uma tecla foi pressionada
-      tecla = getch(); // verifica comando do jogador
+    {                  // VERIFICA SE UMA TECLA FOI PRESSIONADA
+      tecla = getch(); // VERIFICA COMANDO DO JOGADOR
     }
 
     if (bird_x == obstaculo_x + 1) // ADICIONA PONTUAÇÃO AO PLACAR AO PASSAR DO OBSTÁCULO
     {
-      placar++;                           // ADICIONA MAIS UM NA PONTUAÇÃO
-      if (placar != 0 && placar % 5 == 0) // SE O VALOR DA PONTUAÇÃO É DIFERENTE DE ZERO E MULTIPLO DE CINCO
+      placar++;                                              // ADICIONA MAIS UM NA PONTUAÇÃO
+      if (placar != 0 && placar % 5 == 0 && velocidade > 40) // SE O VALOR DA PONTUAÇÃO É DIFERENTE DE ZERO E MULTIPLO DE CINCO E VELOCIDADE MAIOR QUE QUARENTA PARA NÃO FICAR IMPOSSÍVEL DE JOGAR
       {
-        velocidade -= 10; // A VELOCIDADE É AUMENTADA
+        velocidade -= 20; // A VELOCIDADE É AUMENTADA
       }
     }
 
@@ -161,6 +161,7 @@ int main()
 
     if (obstaculo_x == bird_x && (bird_y < numeroAleatorio - 2 || bird_y > numeroAleatorio + 2)) // PAUSA O JOGO CASO HAJA UMA COLISÃO COM O OBSTÁCULO
     {
+      system("cls"); // LIMPA O TERMINAL DO JOGO
       // POSICIONA A MENSAGEM DE GAME OVER
       coord.X = game_over_x;
       coord.Y = game_over_y;
@@ -179,8 +180,8 @@ int main()
         // REMOVE O RASTRO DA ÚLTIMA POSIÇÃO DO OBSTÁCULO NO CENÁRIO
         coord.Y = obstaculo_y; // ADICIONA O VALOR ATUAL DO Y DO OBSTÁCULO A CORDENADA
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-        obstaculo_y--; // PEGA A POSIÇÃO ATUAL DO Y DO OBSTÁCULO E SUBTRAI POR UM
         cout << " ";
+        obstaculo_y--; // PEGA A POSIÇÃO ATUAL DO Y DO OBSTÁCULO E SUBTRAI POR UM
       }
 
       numeroAleatorio = rand() % 15 + 3; // GERA NÚMEROS ALEATÓRIOS 3 e 17
