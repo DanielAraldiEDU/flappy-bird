@@ -96,7 +96,7 @@ int main()
 
       obstaculo1_y++;
 
-      coord.X = obstaculo1_x + 1; // ADICIONA COMPRIMENTO AO OBSTÁCULO 1
+      coord.X = obstaculo1_x + 1; // APAGA O RASTRO DO OBSTÁCULO 1
       SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
       cout << " ";
     }
@@ -122,7 +122,7 @@ int main()
 
         obstaculo2_y++;
 
-        coord.X = obstaculo2_x + 1; // ADICIONA COMPRIMENTO AO OBSTÁCULO 2
+        coord.X = obstaculo2_x + 1; // APAGA O RASTRO DO OBSTÁCULO 2
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         cout << " ";
       }
@@ -150,7 +150,6 @@ int main()
       coord.X = game_over_x - 15;
       coord.Y = game_over_y + 4;
       SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-
       system("pause"); // PAUSA O JOGO
     }
 
