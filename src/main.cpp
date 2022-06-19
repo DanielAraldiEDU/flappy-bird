@@ -1,7 +1,10 @@
 #include <iostream>
 #include <windows.h>
-#include <conio.h>
-#include <time.h>
+#include "./utils/obstacle.cpp"
+#include "./utils/terminal.cpp"
+#include "./utils/bird.cpp"
+#include "./utils/score.cpp"
+#include "./utils/keyboardPress.cpp"
 
 using namespace std;
 
@@ -16,38 +19,30 @@ int main()
 
   system("cls");
 
-  srand(time(NULL));
-
-  int bird_x = 15, bird_y = 10, obstaculo1_x = 130, obstaculo1_y, obstaculo2_x = 130, obstaculo2_y, tecla, passagem1, passagem2, velocidade = 200, placar = 0;
-  bool estaVoando = true;
+  int firstObstacleX = 130, firstObstacleY, secondObstacleX = 130, secondObstacleY, firstObstacleSpace, secondObstacleSpace, speed = 200, score = 0;
+  bool isFlying = true;
 
   cout << "-----------------------------------------------------------------------------------------------------------------------------------";
   cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
   cout << "-----------------------------------------------------------------------------------------------------------------------------------";
 
-  passagem1 = rand() % 15 + 3;
-  passagem2 = rand() % 15 + 3;
+  firstObstacleSpace = openSpace();
+  secondObstacleSpace = openSpace();
 
-  while (estaVoando)
+  COORD birdCoordenates = setBirdPosition(15, 10);
+
+  while (isFlying)
   {
-    coord.X = 60;
-    coord.Y = 1;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    cout << "PLACAR: " << placar;
+    message(60, 1, "SCORE: ", score);
 
-    coord.X = bird_x;
-    coord.Y = bird_y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    cout << char(190);
-
-    obstaculo1_y = 1;
-    while (obstaculo1_y < 20)
+    firstObstacleY = 1;
+    while (firstObstacleY < 20)
     {
-      coord.X = obstaculo1_x;
-      coord.Y = obstaculo1_y;
+      coord.X = firstObstacleX;
+      coord.Y = firstObstacleY;
       SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 
-      if (obstaculo1_y < passagem1 - 2 || obstaculo1_y > passagem1 + 2)
+      if (firstObstacleY < firstObstacleSpace - 2 || firstObstacleY > firstObstacleSpace + 2)
       {
         cout << char(219);
       }
@@ -56,23 +51,23 @@ int main()
         cout << " ";
       }
 
-      obstaculo1_y++;
+      firstObstacleY++;
 
-      coord.X = obstaculo1_x + 1;
+      coord.X = firstObstacleX + 1;
       SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
       cout << " ";
     }
 
-    if (obstaculo1_x <= 65 || obstaculo2_x <= 65)
+    if (firstObstacleX <= 65 || secondObstacleX <= 65)
     {
-      obstaculo2_y = 1;
-      while (obstaculo2_y < 20)
+      secondObstacleY = 1;
+      while (secondObstacleY < 20)
       {
-        coord.X = obstaculo2_x;
-        coord.Y = obstaculo2_y;
+        coord.X = secondObstacleX;
+        coord.Y = secondObstacleY;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 
-        if (obstaculo2_y < passagem2 - 2 || obstaculo2_y > passagem2 + 2)
+        if (secondObstacleY < secondObstacleSpace - 2 || secondObstacleY > secondObstacleSpace + 2)
         {
           cout << char(219);
         }
@@ -81,113 +76,84 @@ int main()
           cout << " ";
         }
 
-        obstaculo2_y++;
+        secondObstacleY++;
 
-        coord.X = obstaculo2_x + 1;
+        coord.X = secondObstacleX + 1;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         cout << " ";
       }
     }
 
-    if ((bird_y <= 0 || bird_y >= 20) ||
-        (obstaculo1_x == bird_x && (bird_y < passagem1 - 2 || bird_y > passagem1 + 2)) ||
-        (obstaculo2_x == bird_x && (bird_y < passagem2 - 2 || bird_y > passagem2 + 2)))
+    if ((birdCoordenates.Y <= 0 || birdCoordenates.Y >= 20) ||
+        (firstObstacleX == birdCoordenates.X && (birdCoordenates.Y < firstObstacleSpace - 2 || birdCoordenates.Y > firstObstacleSpace + 2)) ||
+        (secondObstacleX == birdCoordenates.X && (birdCoordenates.Y < secondObstacleSpace - 2 || birdCoordenates.Y > secondObstacleSpace + 2)))
     {
       system("cls");
-      estaVoando = false;
+      isFlying = false;
 
-      coord.X = 50;
-      coord.Y = 10;
-      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-      cout << "GAME OVER";
-
-      coord.Y = 12;
-      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-      cout << "PLACAR: " << placar;
-
-      coord.X = 35;
-      coord.Y = 14;
-      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+      message(50, 5, "GAME OVER");
+      message(50, 7, "SCORE: ", score);
+      message(35, 10);
       system("pause");
+      return 0;
     }
 
-    if (bird_x == obstaculo1_x + 1 || bird_x == obstaculo2_x + 1)
-    {
-      placar++;
+    Score scoreIndicators;
 
-      if (placar != 0 && placar % 5 == 0 && velocidade > 40)
+    scoreIndicators = setScore(birdCoordenates.X, firstObstacleX + 1, score, speed);
+    score = scoreIndicators.score;
+    speed = scoreIndicators.speed;
+
+    scoreIndicators = setScore(birdCoordenates.X, secondObstacleX + 1, score, speed);
+    score = scoreIndicators.score;
+    speed = scoreIndicators.speed;
+
+    birdCoordenates = handleKeyboardPress(birdCoordenates);
+
+    firstObstacleX--;
+
+    if (firstObstacleX <= 65 || secondObstacleX <= 65)
+    {
+      secondObstacleX--;
+    }
+
+    Sleep(speed);
+
+    SHORT birdY = 0;
+
+    birdY = birdCoordenates.Y - 1;
+    checkBirdCollisionVertically({X : birdCoordenates.X, Y : birdY});
+
+    birdY = birdCoordenates.Y + 1;
+    checkBirdCollisionVertically({X : birdCoordenates.X, Y : birdY});
+
+    if (firstObstacleX < 0)
+    {
+      coord.X = firstObstacleX + 1;
+      while (firstObstacleY > 0)
       {
-        velocidade -= 20;
-      }
-    }
-
-    if (kbhit())
-    {
-      tecla = getch();
-    }
-
-    if (tecla == 'w' || tecla == 'W')
-    {
-      bird_y--;
-      tecla = '0';
-    }
-    else
-    {
-      bird_y++;
-    }
-
-    obstaculo1_x--;
-
-    if (obstaculo1_x <= 65 || obstaculo2_x <= 65)
-    {
-      obstaculo2_x--;
-    }
-
-    Sleep(velocidade);
-
-    coord.Y = bird_y - 1;
-    coord.X = bird_x;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    if (bird_y != 1)
-    {
-      cout << " ";
-    }
-
-    coord.Y = bird_y + 1;
-    coord.X = bird_x;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    if (bird_y != 19)
-    {
-      cout << " ";
-    }
-
-    if (obstaculo1_x < 0)
-    {
-      coord.X = obstaculo1_x + 1;
-      while (obstaculo1_y > 0)
-      {
-        coord.Y = obstaculo1_y;
+        coord.Y = firstObstacleY;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         cout << " ";
-        obstaculo1_y--;
+        firstObstacleY--;
       }
 
-      passagem1 = rand() % 15 + 3;
-      obstaculo1_x = 130;
+      firstObstacleSpace = openSpace();
+      firstObstacleX = 130;
     }
-    else if (obstaculo2_x < 0)
+    else if (secondObstacleX < 0)
     {
-      coord.X = obstaculo2_x + 1;
-      while (obstaculo2_y > 0)
+      coord.X = secondObstacleX + 1;
+      while (secondObstacleY > 0)
       {
-        coord.Y = obstaculo2_y;
+        coord.Y = secondObstacleY;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         cout << " ";
-        obstaculo2_y--;
+        secondObstacleY--;
       }
 
-      passagem2 = rand() % 15 + 3;
-      obstaculo2_x = 130;
+      secondObstacleSpace = openSpace();
+      secondObstacleX = 130;
     }
   }
 
